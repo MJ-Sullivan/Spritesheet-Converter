@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -83,6 +83,15 @@ namespace GifMaker
             this.AllowDrop = true;
         }
 
+        private void Reload()
+        {
+            _fileLoaded = false;
+
+            _frameTracker = 0;
+
+            LoadImage();
+        }
+
         private void t_Tick(object sender, EventArgs e)
         {
             if (_fileLoaded)
@@ -99,7 +108,21 @@ namespace GifMaker
                 _frameTracker = 0;
 
             _frameImage = ((Bitmap)_image).Clone(new Rectangle(0, _frameHeight * _frameTracker, _frameWidth, _frameHeight), _image.PixelFormat);
-            pictureBox1.Image = new Bitmap(_frameImage, new Size((int)(_frameImage.Width * _zoom), (int)(_frameImage.Height * _zoom)));
+
+            DrawZoomedImage();
+            
+        }
+
+        private void DrawZoomedImage()
+        {
+            Bitmap result = new Bitmap((int)(_frameWidth * _zoom), (int)(_frameHeight * _zoom));
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.DrawImage(_frameImage, 0, 0, (int)(_frameWidth * _zoom), (int)(_frameHeight * _zoom));
+            }
+
+            pictureBox1.Image = result;
         }
 
         private void ConvertToGif()
@@ -115,9 +138,8 @@ namespace GifMaker
             {
                 frame.Page = new MagickGeometry(0, 0, 0, 0);
                 _gifCollection.Add(frame);
-                // Infinite loop
-                _gifCollection[frameNum].AnimationIterations = 0;
-                _gifCollection[frameNum].GifDisposeMethod = GifDisposeMethod.Previous;
+                _gifCollection[frameNum].AnimationIterations = 0;   // GIF infinitely loops
+                _gifCollection[frameNum].GifDisposeMethod = GifDisposeMethod.Background;
 
                 _gifCollection[frameNum].AnimationDelay = 100 / _frameRate;
 
@@ -175,7 +197,9 @@ namespace GifMaker
 
             try
             {
-                testFile = new MagickImage(_fileName);
+
+                using (testFile = new MagickImage(_fileName))
+                { }
             } 
             catch (Exception e)
             {
@@ -204,12 +228,11 @@ namespace GifMaker
         {
             _fileLoaded = true;
             pictureBox1.Visible = true;
-            
             using (var tempImage = new Bitmap(_fileName))
             {
                 _image = new Bitmap(tempImage);
             }
-            
+
             this.AllowDrop = false;
 
             WriteToOutput("Image file successfully loaded");
@@ -217,20 +240,23 @@ namespace GifMaker
 
             pictureBox1.Image = (Bitmap)_image.Clone();
 
-            _frameWidth = pictureBox1.Image.Width;
-            _imageWidth = pictureBox1.Image.Width;
-            _frameHeight = pictureBox1.Image.Height;
-            _imageHeight = pictureBox1.Image.Height;
+            // If reloading, ignore resetting values
+            if (textBox4.Text != CleanFileName(_fileName) + ".gif")
+            {
+                _frameWidth = pictureBox1.Image.Width;
+                _imageWidth = pictureBox1.Image.Width;
+                _frameHeight = pictureBox1.Image.Height;
+                _imageHeight = pictureBox1.Image.Height;
+                _numFrames = 1;
+                _aRatio = _imageWidth / (double)_imageHeight;
 
-            _numFrames = 1;
-            _aRatio = _imageWidth / (double)_imageHeight;
+                textBox1.Text = _frameWidth.ToString();
+                textBox2.Text = _frameHeight.ToString();
+                textBox3.Text = "5";
 
-            textBox1.Text = _frameWidth.ToString();
-            textBox2.Text = _frameHeight.ToString();
-            textBox3.Text = "5";
-
-            // file name
-            textBox4.Text = CleanFileName(_fileName) + ".gif";
+                // file name
+                textBox4.Text = CleanFileName(_fileName) + ".gif";
+            }
 
             // Enable user inputs
             textBox1.ReadOnly = false;
@@ -240,6 +266,7 @@ namespace GifMaker
 
             button1.Enabled = true;
             button4.Enabled = true;
+            button5.Enabled = true;
         }
 
         private void ResizeFrame()
@@ -271,7 +298,8 @@ namespace GifMaker
 
             Bitmap bmp = (Bitmap)_image;
             _frameImage = bmp.Clone(new Rectangle(0, 0, _frameWidth, _frameHeight), pictureBox1.Image.PixelFormat);
-            pictureBox1.Image = new Bitmap(_frameImage, new Size((int)(_frameImage.Width * _zoom), (int)(_frameImage.Height * _zoom)));
+
+            DrawZoomedImage();
 
             if (_frameHeight > 0 && _frameHeight <= _imageHeight)
                 _numFrames = _imageHeight / _frameHeight;
@@ -314,6 +342,7 @@ namespace GifMaker
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 _fileName = openFileDialog1.FileName;
+
                 WriteToOutput("Loading \"" + _fileName + "\"...");
 
                 if (CheckFileValid())
@@ -414,16 +443,24 @@ namespace GifMaker
             _saveName = textBox4.Text;
         }
 
+        // Reset button
         private void button4_Click(object sender, EventArgs e)
         {
             Reset();
             button4.Enabled = false;
+            button5.Enabled = false;
             textBox1.Text = "";
             textBox2.Text = "";
             textBox3.Text = "";
             textBox4.Text = ".gif";
             pictureBox1.Hide();
 
+        }
+
+        // Reload button
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Reload();
         }
     }
 }
