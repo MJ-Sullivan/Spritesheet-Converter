@@ -90,6 +90,7 @@ namespace GifMaker
             _frameTracker = 0;
 
             LoadImage();
+            ResizeFrame();
         }
 
         private void t_Tick(object sender, EventArgs e)
@@ -240,13 +241,13 @@ namespace GifMaker
 
             pictureBox1.Image = (Bitmap)_image.Clone();
 
+            _imageHeight = pictureBox1.Image.Height;
             // If reloading, ignore resetting values
             if (textBox4.Text != CleanFileName(_fileName) + ".gif")
             {
+                _frameHeight = pictureBox1.Image.Height;
                 _frameWidth = pictureBox1.Image.Width;
                 _imageWidth = pictureBox1.Image.Width;
-                _frameHeight = pictureBox1.Image.Height;
-                _imageHeight = pictureBox1.Image.Height;
                 _numFrames = 1;
                 _aRatio = _imageWidth / (double)_imageHeight;
 
