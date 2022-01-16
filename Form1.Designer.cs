@@ -1,4 +1,4 @@
-﻿
+
 namespace GifMaker
 {
     partial class Form1
@@ -48,8 +48,9 @@ namespace GifMaker
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button4 = new System.Windows.Forms.Button();
-            this.customLabel1 = new GifMaker.CustomLabel();
+            this.button5 = new System.Windows.Forms.Button();
             this.customLabel2 = new GifMaker.CustomLabel();
+            this.customLabel1 = new GifMaker.CustomLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -232,7 +233,7 @@ namespace GifMaker
             // button4
             // 
             this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(195, 134);
+            this.button4.Location = new System.Drawing.Point(132, 134);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 32);
             this.button4.TabIndex = 19;
@@ -240,19 +241,16 @@ namespace GifMaker
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // customLabel1
+            // button5
             // 
-            this.customLabel1.Font = new System.Drawing.Font("Copperplate Gothic Bold", 24F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.customLabel1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.customLabel1.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.customLabel1.Location = new System.Drawing.Point(72, 32);
-            this.customLabel1.Name = "customLabel1";
-            this.customLabel1.OutlineForeColor = System.Drawing.Color.Silver;
-            this.customLabel1.OutlineWidth = 2F;
-            this.customLabel1.Size = new System.Drawing.Size(320, 84);
-            this.customLabel1.TabIndex = 21;
-            this.customLabel1.Text = "SPRITESHEET TO";
-            this.customLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.button5.Enabled = false;
+            this.button5.Location = new System.Drawing.Point(257, 134);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 32);
+            this.button5.TabIndex = 23;
+            this.button5.Text = "Reload";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // customLabel2
             // 
@@ -268,11 +266,26 @@ namespace GifMaker
             this.customLabel2.Text = "GIF CONVERTER";
             this.customLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // customLabel1
+            // 
+            this.customLabel1.Font = new System.Drawing.Font("Copperplate Gothic Bold", 24F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.customLabel1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.customLabel1.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.customLabel1.Location = new System.Drawing.Point(72, 32);
+            this.customLabel1.Name = "customLabel1";
+            this.customLabel1.OutlineForeColor = System.Drawing.Color.Silver;
+            this.customLabel1.OutlineWidth = 2F;
+            this.customLabel1.Size = new System.Drawing.Size(320, 84);
+            this.customLabel1.TabIndex = 21;
+            this.customLabel1.Text = "SPRITESHEET TO";
+            this.customLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.customLabel2);
             this.Controls.Add(this.customLabel1);
             this.Controls.Add(this.button4);
@@ -318,6 +331,7 @@ namespace GifMaker
         private System.Windows.Forms.Button button4;
         private CustomLabel customLabel1;
         private CustomLabel customLabel2;
+        private System.Windows.Forms.Button button5;
     }
 }
 
