@@ -204,7 +204,12 @@ namespace GifMaker
         {
             _fileLoaded = true;
             pictureBox1.Visible = true;
-            _image = new Bitmap(_fileName);
+            
+            using (var tempImage = new Bitmap(_fileName))
+            {
+                _image = new Bitmap(tempImage);
+            }
+            
             this.AllowDrop = false;
 
             WriteToOutput("Image file successfully loaded");
